@@ -22,11 +22,18 @@ def disconnect_db():
 # ---------------------------------------------------------
 def get_organization_instructions_names(organization_id: str):
     collection = database["instruction"]
-    return loads(dumps(collection.find({"organization_id": ObjectId(organization_id)}, {"name":1})))
+    organizations = loads(dumps(collection.find({"organization_id": ObjectId(organization_id)}, {"name":1})))
+    for organization in organizations:
+        organization["_id"] = str(organization["_id"])
+    return organizations
 
 def get_instruction(_id: str):
     collection = database["instruction"]
-    return collection.find_one({"_id": ObjectId(_id)})
+    instruction = collection.find_one({"_id": ObjectId(_id)})
+    instruction["_id"] = str(instruction["_id"])
+    instruction["organization_id"] = str(instruction["organization_id"])
+    print(instruction)
+    return instruction
 
 def add_instruction(name: str, description: str, organization_id: str = None):
     collection = database["instruction"]
