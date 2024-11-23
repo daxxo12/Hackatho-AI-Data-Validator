@@ -14,22 +14,22 @@ client = pymongo.MongoClient(MONGO_ATLAS_URI, server_api=pymongo.server_api.Serv
 database = client["data"]
 
 # ---------------------------------------------------------
-# Specification
+# instruction
 # ---------------------------------------------------------
-def get_organization_specifications_names(organization_id: str):
-    collection = database["specification"]
+def get_organization_instructions_names(organization_id: str):
+    collection = database["instruction"]
     return loads(dumps(collection.find({"organization_id": ObjectId(organization_id)}, {"name":1})))
 
-def get_specification(_id: str):
-    collection = database["specification"]
+def get_instruction(_id: str):
+    collection = database["instruction"]
     return collection.find_one({"_id": ObjectId(_id)})
 
-def add_specification(name: str, description: str, organization_id: str):
-    collection = database["specification"]
+def add_instruction(name: str, description: str, organization_id: str):
+    collection = database["instruction"]
     collection.insert_one({"name": name, "description": description, "organization_id": ObjectId(organization_id)})
 
-def remove_specification(_id: str):
-    collection = database["specification"]
+def remove_instruction(_id: str):
+    collection = database["instruction"]
     collection.delete_one({"_id": ObjectId(_id)})
 
 # ---------------------------------------------------------
