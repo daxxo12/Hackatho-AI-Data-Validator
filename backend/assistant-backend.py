@@ -14,7 +14,7 @@ def destroyThread(thread_id: str) -> bool:
     else:
         return False
 
-def analyzeFile(file, instructions:str, id_thread = "", message:str = "test") -> str:
+def analyzeFile(file, instructions:str, id_thread = "", message:str = "test") -> (str, str):
     uploaded = client.files.create(file = file, purpose="assistants")
     #global assistant
     if not id_thread:
@@ -47,4 +47,4 @@ def analyzeFile(file, instructions:str, id_thread = "", message:str = "test") ->
         thread_id=id_thread,
     )
     #print(messages.data[0].content[0].text.value)
-    return messages.data[0].content[0].text.value
+    return messages.data[0].content[0].text.value, id_thread
