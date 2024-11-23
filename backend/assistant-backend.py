@@ -8,12 +8,11 @@ thread_id = ""
 
 def createThread():
     new_thread = client.beta.threads.create()
-    global thread_id
-    thread_id = new_thread.id
+    return new_thread.id
 
 def destroyThread(thread_id: str):
     response = client.beta.threads.delete(thread_id = thread_id)
-    print(response)
+    return response.deleted
 
 def analyzeFile(file, instructions:str, id_thread = "", message:str = ""):
     #uploaded = client.files.create(file = file, purpose="assistants")
@@ -21,21 +20,21 @@ def analyzeFile(file, instructions:str, id_thread = "", message:str = ""):
         vector_store_id="vs_LKVFCV8OXMseGID0ECJzKaMx",
         files = [file],
     )
+    global assistant
     assistant = client.beta.assistants.update(
         assistant_id = assistant_id,
         tool_resources={"file_search": {"vector_store_ids" : ["vs_LKVFCV8OXMseGID0ECJzKaMx"]}}
     )
     global thread_id
-    if id_thread == "" and thread_id != "":
-        id_thread = thread_id
-        new_message = client.beta.threads.messages.create(
-            id_thread,
-            role="user",
-            content=message,
-            attachments=[{"file_id" : uploaded.id, "tools" : [{"type":"file_search"}]}]
-            )
-        run = client.beta.threads.runs.create_and_poll(thread_id = id_thread, assistant_id = assistant_id, additional_instructions=instructions)
-        messages = client.beta.threads.messages.list(
-            thread_id=id_thread,
+    id_thread = thread_id
+    new_message = client.beta.threads.messages.create(
+        id_thread,
+        role="user",
+        content=message,
+        attachments=[{"file_id" : uploaded.id, "tools" : [{"type":"file_search"}]}]
         )
-        print(messages.data[0].content[0].text.value)
+    run = client.beta.threads.runs.create_and_poll(thread_id = id_thread, assistant_id = assistant_id, additional_instructions=instructions)
+    messages = client.beta.threads.messages.list(
+        thread_id=id_thread,
+    )
+    print(messages.data[0].content[0].text.value)
