@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 import os
+import importlib
+assistant_backend = importlib.import_module("assistant-backend")
 
 app = Flask(__name__)
 
@@ -74,10 +76,11 @@ def send_to_assistant():
 
     file = request.files.get('file')
     instruction_id = request.form.get('instruction_id')
+    thread_id = request.form.get('thread_id')
     instruction = None
 
     if not file or not allowed_file(file.filename):
-        return jsonify({"error": "Invalid or missing file. Only .txt files are allowed."}), 400
+        return jsonify({"error": "Invalid or missing file. Only .txt and .pdf files are allowed."}), 400
 
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(file_path)
@@ -85,20 +88,25 @@ def send_to_assistant():
     try:
         if instruction_id:
             ################### TU TREBA FUNKCIU NA ZISKANIE INSTRUKCIE PODLA ID!!!!!!!!!!!!
+            instruction = "Example instruction fetched from DB by ID"
             if not instruction:
-                return jsonify({"error": f"Instruction with ID {instruction_id} not found."}), 404
+                #return jsonify({"error": f"Instruction with ID {instruction_id} not found."}), 404
+                instruction = "find spelling mistakes in this file"
 
         if not instruction:
             instruction = request.form.get('instruction')
             if not instruction:
                 return jsonify({"error": "No instruction provided or selected."}), 400
 
-        ################### TU TREBA FUNKCIU NA POSLANIE DO ASISTENTA!!!!!!!!!!!!!!!!!!
-        return jsonify({"message": "Request sent successfully!", "response": "TU JE RESPONSE OD ASISTENTA"}), 200
+        with open(file_path, 'rb') as file_obj:
+            response = assistant_backend.analyzeFile(file_obj, instruction, id_thread=thread_id)
+        
+        return jsonify({"message": "Request sent successfully!", "response": response}), 200
     except Exception as e:
         return jsonify({"error": f"Failed to process the request: {str(e)}"}), 500
     finally:
         os.remove(file_path)
+
 
 
 if __name__ == "__main__":
