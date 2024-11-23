@@ -7,11 +7,15 @@ from dotenv import load_dotenv
 from bson.json_util import dumps, loads
 
 load_dotenv()
-
 MONGO_ATLAS_URI = os.getenv('MONGO_ATLAS_URI')
-client = pymongo.MongoClient(MONGO_ATLAS_URI, server_api=pymongo.server_api.ServerApi(version="1", strict=True, deprecation_errors=True))
 
-database = client["data"]
+def connect_db():
+    global client, database
+    client = pymongo.MongoClient(MONGO_ATLAS_URI, server_api=pymongo.server_api.ServerApi(version="1", strict=True, deprecation_errors=True))
+    database = client["data"]
+
+def disconnect_db():
+    client.close()
 
 # ---------------------------------------------------------
 # instruction
@@ -24,7 +28,7 @@ def get_instruction(_id: str):
     collection = database["instruction"]
     return collection.find_one({"_id": ObjectId(_id)})
 
-def add_instruction(name: str, description: str, organization_id: str):
+def add_instruction(name: str, description: str, organization_id: str = None):
     collection = database["instruction"]
     collection.insert_one({"name": name, "description": description, "organization_id": ObjectId(organization_id)})
 
@@ -42,6 +46,10 @@ def add_organization(name: str):
 def remove_organization(_id: str):
     collection = database["organization"]
     collection.delete_one({"_id": ObjectId(_id)})
+
+def get_organization(_id: str):
+    collection = database["organization"]
+    return collection.find_one({"_id": ObjectId(_id)})
 
 # ---------------------------------------------------------
 # Users
@@ -82,6 +90,6 @@ def clear_threads_history(username: str):
     collection = database["user"]
     collection.update_one({"username": username}, {"$set": {"threads_history": []}})
 
-
-
-client.close()
+connect_db()
+print(get_user("user"))
+disconnect_db()

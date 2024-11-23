@@ -2,7 +2,9 @@ from flask import Flask, request, jsonify
 import os
 import importlib
 assistant_backend = importlib.import_module("assistant-backend")
+import db
 
+db.connect_db()
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "uploads" 
@@ -36,16 +38,19 @@ def handle_instructions():
         return jsonify({"error": "No valid input provided. Submit a file or text."}), 400
 
     try:
-        ################### TU TREBA FUNKCIU NA PRIDANIE DO DB
+        if 'name' in request.json:
+            db.add_instruction(request.json.name, instruction)
+        else:
+            return jsonify({"error": "Instruction name not provided."}), 400
         return jsonify({"message": "Instruction saved successfully!", "instruction": instruction}), 200
     except Exception as e:
         return jsonify({"error": f"Failed to save instruction: {str(e)}"}), 500
 
-@app.route("/instructions", methods=["GET"])
+@app.route("/instructions/", methods=["GET"])
 def get_instructions():
     try:
-        ################### TU TREBA FUNKCIU NA ZISKANIE Z DB
-        return jsonify({"instructions": "TOTO SU INSTRUKCIE KTORE VRATI DATABAZA"}), 200
+        instructions = db.get_organization_instructions_names("67422b83b2481aa16b6daf63")
+        return jsonify({"instructions": instructions}), 200
     except Exception as e:
         return jsonify({"error": f"Failed to retrieve instructions: {str(e)}"}), 500
 
@@ -87,8 +92,7 @@ def send_to_assistant():
 
     try:
         if instruction_id:
-            ################### TU TREBA FUNKCIU NA ZISKANIE INSTRUKCIE PODLA ID!!!!!!!!!!!!
-            instruction = "Example instruction fetched from DB by ID"
+            instruction = db.get_instruction(instruction_id)
             if not instruction:
                 #return jsonify({"error": f"Instruction with ID {instruction_id} not found."}), 404
                 instruction = "find spelling mistakes in this file"
