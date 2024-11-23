@@ -78,6 +78,9 @@ def send_to_assistant():
     instruction_id = request.form.get('instruction_id')
     thread_id = request.form.get('thread_id')
     instruction = None
+    if not thread_id:
+        thread_id = assistant_backend.createThread()
+        app.logger.info(f"Type of file object: {thread_id}")
 
     if not file or not allowed_file(file.filename):
         return jsonify({"error": "Invalid or missing file. Only .txt and .pdf files are allowed."}), 400
@@ -96,7 +99,8 @@ def send_to_assistant():
         if not instruction:
             instruction = request.form.get('instruction')
             if not instruction:
-                return jsonify({"error": "No instruction provided or selected."}), 400
+                #return jsonify({"error": "No instruction provided or selected."}), 400
+                instruction = "find spelling mistakes in this file"
 
         with open(file_path, 'rb') as file_obj:
             response = assistant_backend.analyzeFile(file_obj, instruction, id_thread=thread_id)
@@ -105,7 +109,8 @@ def send_to_assistant():
     except Exception as e:
         return jsonify({"error": f"Failed to process the request: {str(e)}"}), 500
     finally:
-        os.remove(file_path)
+        #os.remove(file_path)
+        pass
 
 
 
