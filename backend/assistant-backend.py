@@ -5,17 +5,16 @@ assistant = client.beta.assistants.retrieve(assistant_id = assistant_id)
 #print(assistant)
 
 
-
-'''def createThread():
-    new_thread = client.beta.threads.create()
-    return new_thread.id
-    '''
-
-def destroyThread(thread_id: str):
+def destroyThread(thread_id: str) -> bool:
+    thread = client.beta.threads.retrieve(thread_id = thread_id)
+    store_response = client.beta.vector_stores.delete(thread.tool_resources.file_search.vector_store_ids[0])
     response = client.beta.threads.delete(thread_id = thread_id)
-    return response.deleted
+    if response.deleted and store_response.deleted:
+        return True
+    else:
+        return False
 
-def analyzeFile(file, instructions:str, id_thread = "", message:str = "test"):
+def analyzeFile(file, instructions:str, id_thread = "", message:str = "test") -> str:
     uploaded = client.files.create(file = file, purpose="assistants")
     #global assistant
     if not id_thread:
@@ -29,10 +28,6 @@ def analyzeFile(file, instructions:str, id_thread = "", message:str = "test"):
 
             }
         ])
-        '''assistant = client.beta.assistants.update(
-            assistant_id=assistant_id,
-            tool_resources={"file_search": {"vector_store_ids": ["vs_LKVFCV8OXMseGID0ECJzKaMx"]}}
-        )'''
         id_thread = thread.id
         #print(id_thread)
         #print(thread.tool_resources.file_search.vector_store_ids)
