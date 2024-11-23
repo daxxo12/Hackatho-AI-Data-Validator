@@ -1,1 +1,1 @@
-# Hackatho-AI-Data-Validator
+# Hackathon-AI-Data-Validator
