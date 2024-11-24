@@ -48,3 +48,14 @@ def analyzeFile(file, instructions:str, id_thread = "", message:str = "test") ->
     )
     #print(messages.data[0].content[0].text.value)
     return messages.data[0].content[0].text.value, id_thread
+
+def chat(id_thread:str, message:str) -> str:
+    thread = client.beta.threads.retrieve(id_thread)
+    new_message = client.beta.threads.messages.create(
+        id_thread,
+        role="user",
+        content=message
+    )
+    run = client.beta.threads.runs.create_and_poll(thread_id = id_thread, assistant_id = assistant_id)
+    messages = client.beta.threads.messages.list(thread_id=id_thread)
+    return messages.data[0].content[0].text.value
