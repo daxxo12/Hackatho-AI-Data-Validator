@@ -84,10 +84,10 @@ def get_threads_history(username: str):
     collection = database["user"]
     return collection.find_one({"username": username})["threads_history"]
 
-def add_thread(username: str, thread_id: str):
+def add_thread(username: str, thread_id: str, thread_name: str):
     collection = database["user"]
     threads_history = get_threads_history(username)
-    threads_history.append(thread_id)
+    threads_history.append({"id": thread_id, "name": thread_name})
     collection.update_one({"username": username}, {"$set": {"threads_history": threads_history}})
 
 def remove_thread(username: str, thread_id: str):
