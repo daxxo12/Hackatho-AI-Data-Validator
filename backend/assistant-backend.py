@@ -13,7 +13,7 @@ def destroyThread(thread_id: str) -> bool:
     else:
         return False
 
-def analyzeFile(file, instructions:str, thread_name:str, id_thread = "", message:str = "test") -> (str, str):
+def analyzeFile(file, instructions:str, thread_name:str, message:str, id_thread = "", ) -> (str, str):
     uploaded = client.files.create(file = file, purpose="assistants")
     if not id_thread:
         thread = client.beta.threads.create(messages=[
@@ -32,6 +32,7 @@ def analyzeFile(file, instructions:str, thread_name:str, id_thread = "", message
         #print(thread.tool_resources.file_search.vector_store_ids)
     else:
         thread = client.beta.threads.retrieve(id_thread)
+        message = "Please validate the file against the instructions."
         vector_store_files = client.beta.vector_stores.files.list(thread.tool_resources.file_search.vector_store_ids[0])
         for file in vector_store_files:
             client.beta.vector_stores.files.delete(vector_store_id=thread.tool_resources.file_search.vector_store_ids[0], file_id=file.id)
