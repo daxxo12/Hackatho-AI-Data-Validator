@@ -56,7 +56,7 @@ def handle_instructions():
 @app.route("/instructions/", methods=["GET"])
 def get_instructions():
     try:
-        instructions = db.get_organization_instructions_names("67422b83b2481aa16b6daf63")
+        instructions = db.get_organization_instructions_names("6742e0961a33f28dbc72b4dd")
         app.logger.info(f"Instructions: {instructions}")
         return jsonify({"instructions": instructions}), 200
     except Exception as e:

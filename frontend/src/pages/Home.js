@@ -17,4 +17,4 @@ function Home() {
 
 export default Home;
 
-document.title = 'Jožo - Home';
+document.title = 'docMaster - Home';

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { postData, postDocData } from "../api/api";
 import AiIcon from '../icons/ai_output.svg';
 import Markdown from 'react-markdown';
+import {threadIDGet, getInstID} from '../components/ChatSection';
 
 function WithInstructions() {
     const navigate = useNavigate();
@@ -15,8 +16,15 @@ function WithInstructions() {
         if(uploadedDoc && uploadedInstructions){
             postData("/instructions", formDataIns).then(id => {
                 formDataDoc.append('instruction_id', id);
+                getInstID(id);
                 postDocData("/assistant", formDataDoc).then(response => {
-                    document.getElementById('Chat-History').innerHTML += "<div class='Ai-Output'><img width=\"35px\" height=\"35px\" src="+ AiIcon + "/><div class='Text-Bubble'>" + response.response.substring(8, response.response.length - 3) + "</div></div>"
+                    threadIDGet(response.thread_id);
+                    if(response.response[0] === '`'){
+                        document.getElementById('Chat-History').innerHTML += "<div class='Ai-Output'><img width=\"35px\" height=\"35px\" src="+ AiIcon + "/><div class='Text-Bubble'>" + response.response.substring(8, response.response.length - 3) + "</div></div>"
+                      }
+                      else{
+                        document.getElementById('Chat-History').innerHTML += "<div class='Ai-Output'><img width=\"35px\" height=\"35px\" src="+ AiIcon + "/><div class='Text-Bubble'>" + response.response + "</div></div>"
+                    }
                     document.getElementById('temp_img').remove();
                 });
                 navigate("/validating");
@@ -76,4 +84,4 @@ function handleInstructionsUpload(event){
 
 export default WithInstructions;
 
-document.title = 'Jožo - Uploading';
+document.title = 'docMaster - Uploading';

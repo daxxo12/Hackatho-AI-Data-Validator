@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { postDocData } from "../api/api";
 import AiIcon from '../icons/ai_output.svg';
+import {threadIDGet, getInstID} from '../components/ChatSection';
 
 function PredefinedInstructions() {
   const [data, setData] = useState([]);
@@ -20,9 +21,15 @@ function PredefinedInstructions() {
     function HandleStartValidation(){
         if(fileUploaded && instructionChosen){
             formDataDoc.append('instruction_id', instructionId);
+            getInstID(instructionId);
             postDocData("/assistant", formDataDoc).then(response => {
-              console.log(response.response);
-                document.getElementById('Chat-History').innerHTML += "<div class='Ai-Output'><img width=\"35px\" height=\"35px\" src="+ AiIcon + "/><div class='Text-Bubble'>" + response.response.substring(8, response.response.length - 3) + "</div></div>"
+                threadIDGet(response.thread_id);
+                if(response.response[0] === '`'){
+                  document.getElementById('Chat-History').innerHTML += "<div class='Ai-Output'><img width=\"35px\" height=\"35px\" src="+ AiIcon + "/><div class='Text-Bubble'>" + response.response.substring(8, response.response.length - 3) + "</div></div>"
+                }
+                else{
+                  document.getElementById('Chat-History').innerHTML += "<div class='Ai-Output'><img width=\"35px\" height=\"35px\" src="+ AiIcon + "/><div class='Text-Bubble'>" + response.response + "</div></div>"
+                }
                 document.getElementById('temp_img').remove();
             });
             navigate("/validating");
@@ -92,4 +99,4 @@ function HandleStartValidation(event){
   
 }
 
-document.title = 'Jožo - Uploading';
+document.title = 'docMaster - Uploading';

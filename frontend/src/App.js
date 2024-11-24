@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
           <div id="App-header">
-          <Link className="logotext" to="/">Jožo - The AI Validator</Link>
+          <Link className="logotext" to="/">docMaster - The AI Validator</Link>
             <Routes>
               <Route path='/' element={<Home />} /> 
               <Route path="/validating" element={<Validating />}/> 
@@ -26,4 +26,4 @@ function App() {
 
 export default App;
 
-document.title = 'Jožo';
+document.title = 'docMaster';

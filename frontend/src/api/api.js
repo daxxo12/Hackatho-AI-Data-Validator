@@ -36,3 +36,15 @@ export const postDocData = (where, data) => {
         console.error(`Error: ${error.response?.data?.message || error.message}`);
     }
 }
+
+export const userPromptData = (where, data) => { 
+    try { 
+        const promise = api.post(where, data, {headers :{ 
+            'Content-Type' : 'application/json',},
+        });
+        return promise.then((response) => response);
+        
+    } catch (error){ 
+        console.error(`Error: ${error.response?.data?.message || error.message}`);
+    }
+}
