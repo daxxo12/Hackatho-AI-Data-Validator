@@ -50,6 +50,7 @@ def analyzeFile(file, instructions:str, thread_name:str, message:str = "test", i
     run = client.beta.threads.runs.create_and_poll(thread_id = id_thread, assistant_id = assistant_id, additional_instructions=add_instructions)
     messages = client.beta.threads.messages.list(
         thread_id=id_thread,
+        run_id=run.id,
     )
     #print(messages.data[0].content[0].text.value)
     return messages.data[0].content[0].text.value, id_thread
