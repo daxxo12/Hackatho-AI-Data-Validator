@@ -45,6 +45,8 @@ def analyzeFile(file, instructions:str, thread_name:str, message:str = "test", i
             )
     global add_instructions
     add_instructions = instructions
+    thread = client.beta.threads.retrieve(id_thread)
+    store = client.beta.vector_stores.files.create_and_poll(file_id=uploaded.id, vector_store_id=thread.tool_resources.file_search.vector_store_ids[0])
     run = client.beta.threads.runs.create_and_poll(thread_id = id_thread, assistant_id = assistant_id, additional_instructions=add_instructions)
     messages = client.beta.threads.messages.list(
         thread_id=id_thread,
