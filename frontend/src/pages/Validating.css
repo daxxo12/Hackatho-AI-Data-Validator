@@ -1,0 +1,34 @@
+.Validating-header {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.Validating-Content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 100px;
+    width: 100%;
+}
+  
+.File-Upload{
+    width: 200px;
+    height: 200px;
+}
+  
+input[type="file"]::file-selector-button {
+    display: none;
+    border: none;
+    padding: 0.2em 0.4em;
+    border-radius: 0.2em;
+    background-color: #a29bfe;
+    transition: 0.3s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: rgb(226, 0, 116);
+}
