@@ -34,9 +34,9 @@ def analyzeFile(file, instructions:str, thread_name:str, message:str = "test", i
     else:
         thread = client.beta.threads.retrieve(id_thread)
         message = "Please validate the file against the instructions."
-        vector_store_files = client.beta.vector_stores.files.list(thread.tool_resources.file_search.vector_store_ids[0])
-        for file in vector_store_files:
-            client.beta.vector_stores.files.delete(vector_store_id=thread.tool_resources.file_search.vector_store_ids[0], file_id=file.id)
+        #vector_store_files = client.beta.vector_stores.files.list(thread.tool_resources.file_search.vector_store_ids[0])
+        #for file in vector_store_files:
+        #    client.beta.vector_stores.files.delete(vector_store_id=thread.tool_resources.file_search.vector_store_ids[0], file_id=file.id)
         client.beta.threads.messages.create(
             id_thread,
             role="user",
