@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom';
 import './WithInstructions.css';
 import UploadIcon from '../icons/upload-file.svg'
 import { useNavigate } from "react-router-dom";
+import { postData, postDocData } from "../api/api";
+import AiIcon from '../icons/ai_output.svg';
+import Markdown from 'react-markdown';
 
 function WithInstructions() {
     const navigate = useNavigate();
@@ -10,7 +13,14 @@ function WithInstructions() {
     
     function HandleStartValidation(){
         if(uploadedDoc && uploadedInstructions){
-            navigate("/validating");
+            postData("/instructions", formDataIns).then(id => {
+                formDataDoc.append('instruction_id', id);
+                postDocData("/assistant", formDataDoc).then(response => {
+                    document.getElementById('Chat-History').innerHTML += "<div class='Ai-Output'><img width=\"35px\" height=\"35px\" src="+ AiIcon + "/><div class='Text-Bubble'>" + response.response.substring(8, response.response.length - 3) + "</div></div>"
+                    document.getElementById('temp_img').remove();
+                });
+                navigate("/validating");
+            })
         }
         else{ 
             alert('Please upload both files before proceeding.'); 
@@ -37,14 +47,18 @@ function WithInstructions() {
   );
 }
 
+function asdfq(response){
+    return <Markdown>response.response</Markdown>;    
+}
 
 let uploadedDoc = false;
 let uploadedInstructions = false;
-const formData = new FormData();
+const formDataDoc = new FormData();
+const formDataIns = new FormData();
 
 function handleFileUpload(event){
-    console.log(event.target.files[0]);
-    formData.append('doc_file', event.target.files[0]);
+    formDataDoc.append('file', event.target.files[0]);
+    formDataIns.append('name', event.target.files[0].name);
     uploadedDoc = true;
     if(uploadedDoc && uploadedInstructions){
         document.getElementById('Start-Validating-Container').style.display = "flex";
@@ -52,8 +66,8 @@ function handleFileUpload(event){
 }
 
 function handleInstructionsUpload(event){
-    console.log(event.target.files[0]);
-    formData.append('instructions_file', event.target.files[0]);
+    formDataIns.append('file', event.target.files[0]);
+    formDataIns.append('name', event.target.files[0].name);
     uploadedInstructions = true;
     if(uploadedDoc && uploadedInstructions){
         document.getElementById('Start-Validating-Container').style.display = "flex";

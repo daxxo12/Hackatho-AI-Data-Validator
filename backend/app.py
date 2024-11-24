@@ -2,10 +2,13 @@ from flask import Flask, request, jsonify
 import os
 import importlib
 import db
+from flask_cors import CORS
 assistant_backend = importlib.import_module("assistant-backend")
 
 db.connect_db()
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 UPLOAD_FOLDER = "uploads" 
 ALLOWED_EXTENSIONS = {'txt', "pdf"}
@@ -44,9 +47,9 @@ def handle_instructions():
     try:
         print(f"Instruction: {instruction}")
         print(f"Name: {name}")
-        db.add_instruction(name, instruction)
-       
-        return jsonify({"message": "Instruction saved successfully!", "instruction": instruction}), 200
+        instruction_id = db.add_instruction(name, instruction)
+
+        return jsonify(instruction_id), 200
     except Exception as e:
         return jsonify({"error": f"Failed to save instruction: {str(e)}"}), 500
 

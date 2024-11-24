@@ -107,18 +107,16 @@ textarea::placeholder{
 .Text-Bubble{
     cursor: default;
     text-align: start;
-    font-size: 0.65em;
+    font-size: 0.5em;
     max-width: 75%;
     height: auto;
-    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 7px;
     border-radius: 8px;
     background-color: rgb(37, 34, 36);
     transition: 0.3s;
     word-break: break-all;
-}
-
-.Text-Bubble:hover{
-    scale: 1.03;
 }
 
 #SendButton{

@@ -14,7 +14,7 @@ function App() {
           <Link className="logotext" to="/">Jožo - The AI Validator</Link>
             <Routes>
               <Route path='/' element={<Home />} /> 
-              <Route path="/validating" element={<Validating />} /> 
+              <Route path="/validating" element={<Validating />}/> 
               <Route path="/with-instructions" element={<WithInstructions />} />
               <Route path="/predefined-instructions" element={<PredefinedInstructions />} />
             </Routes>

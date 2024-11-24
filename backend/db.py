@@ -38,6 +38,9 @@ def get_instruction(_id: str):
 def add_instruction(name: str, description: str, organization_id: str = None):
     collection = database["instruction"]
     collection.insert_one({"name": name, "description": description, "organization_id": ObjectId(organization_id)})
+    id = collection.find_one({"name" : name}, {"_id" : 1})
+    id["_id"] = str(id["_id"])  
+    return loads(dumps(id))
 
 def remove_instruction(_id: str):
     collection = database["instruction"]

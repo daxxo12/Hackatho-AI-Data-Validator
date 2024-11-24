@@ -4,6 +4,9 @@ import UserIcon from '../icons/user_prompt.svg';
 import AiIcon from '../icons/ai_output.svg';
 import LoadingIcon from '../icons/loading_ai_prompt.gif';
 
+
+const marked = require('marked');
+
 function ChatSection() {
   return (
     <div className="Chat-Section-Container">
@@ -13,10 +16,7 @@ function ChatSection() {
                 <div className='Text-Bubble'>Check my file...</div>
                 <img width="35px" height="35px" src={UserIcon}/>
             </div>
-            <div className='Ai-Output'>
-                <img width="35px" height="35px" src={AiIcon}/>
-                <div className='Text-Bubble'>You don't need to do that..d asd asd ad asd sa sad as e.</div>
-            </div>
+            <img width='60px' height='27px' id='temp_img' src={LoadingIcon} />
         </div>
         <div className='Input-Area'>
           <textarea id="Text-Promt" onChange={handleInputTyping} placeholder="Type something..." className="Chat-Input" type='text'/>
