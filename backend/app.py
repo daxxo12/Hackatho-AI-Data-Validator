@@ -118,7 +118,7 @@ def send_to_assistant():
 
         with open(file_path, 'rb') as file_obj:
             print(f"Instruction: {instruction['description']}")
-            response = assistant_backend.analyzeFile(file_obj, instruction["description"], id_thread=thread_id)
+            response, thread_id_resp = assistant_backend.analyzeFile(file_obj, instruction["description"], id_thread=thread_id)
         
         return jsonify({"message": "Request sent successfully!", "response": response}), 200
     except Exception as e:
