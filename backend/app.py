@@ -42,7 +42,8 @@ def handle_instructions():
         return jsonify({"error": "No valid input provided. Submit a file or text."}), 400
 
     try:
-        
+        print(f"Instruction: {instruction}")
+        print(f"Name: {name}")
         db.add_instruction(name, instruction)
        
         return jsonify({"message": "Instruction saved successfully!", "instruction": instruction}), 200
