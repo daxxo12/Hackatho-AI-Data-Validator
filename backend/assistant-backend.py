@@ -3,6 +3,7 @@ client = OpenAI()
 assistant_id = "asst_IDASp9o2BX2zy7hzMTeJGCz6"
 assistant = client.beta.assistants.retrieve(assistant_id = assistant_id)
 
+add_instructions:str = ""
 
 def destroyThread(thread_id: str) -> bool:
     thread = client.beta.threads.retrieve(thread_id = thread_id)
@@ -42,7 +43,9 @@ def analyzeFile(file, instructions:str, thread_name:str, message:str = "test", i
             content=message,
             attachments=[{"file_id" : uploaded.id, "tools" : [{"type":"file_search"}]}]
             )
-    client.beta.threads.runs.create_and_poll(thread_id = id_thread, assistant_id = assistant_id, additional_instructions=instructions)
+    global add_instructions
+    add_instructions = instructions
+    run = client.beta.threads.runs.create_and_poll(thread_id = id_thread, assistant_id = assistant_id, additional_instructions=add_instructions)
     messages = client.beta.threads.messages.list(
         thread_id=id_thread,
     )
