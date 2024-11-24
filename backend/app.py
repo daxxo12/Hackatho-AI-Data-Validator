@@ -131,6 +131,24 @@ def send_to_assistant():
         os.remove(file_path)
         pass
 
+@app.route("/chat", methods=["POST"])
+def chat_endpoint():
+    try:
+        data = request.get_json()
+        id_thread = data.get("id_thread")
+        message = data.get("message")
+
+        if not id_thread or not message:
+            return jsonify({"error": "Both 'id_thread' and 'message' are required"}), 400
+
+        try:
+            response = assistant_backend.chat(id_thread, message)
+            return jsonify({"message": response}), 200
+        except Exception as e:
+            return jsonify({"error": f"Failed to interact with the chat: {str(e)}"}), 500
+    except Exception as e:
+        return jsonify({"error": f"Invalid request format: {str(e)}"}), 400
+
 
 
 if __name__ == "__main__":
