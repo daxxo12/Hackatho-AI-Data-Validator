@@ -13,7 +13,7 @@ def destroyThread(thread_id: str) -> bool:
     else:
         return False
 
-def analyzeFile(file, instructions:str, id_thread = "", message:str = "test") -> (str, str):
+def analyzeFile(file, instructions:str, thread_name:str, id_thread = "", message:str = "test") -> (str, str):
     uploaded = client.files.create(file = file, purpose="assistants")
     if not id_thread:
         thread = client.beta.threads.create(messages=[
@@ -22,7 +22,8 @@ def analyzeFile(file, instructions:str, id_thread = "", message:str = "test") ->
                 "content" : "Ignore this message, just analyze the provided file using the instructions.",
                 "attachments" : [
                     {"file_id" : uploaded.id, "tools" : [{"type" : "file_search"}]}
-                ]
+                ],
+                "metadata" : {"name" : thread_name}
 
             }
         ])

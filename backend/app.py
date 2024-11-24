@@ -11,7 +11,7 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 UPLOAD_FOLDER = "uploads" 
-ALLOWED_EXTENSIONS = {'txt', "pdf"}
+ALLOWED_EXTENSIONS = {'txt', "pdf", "docx"}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -122,7 +122,7 @@ def send_to_assistant():
 
         with open(file_path, 'rb') as file_obj:
             print(f"Instruction: {instruction['description']}")
-            response, thread_id_resp = assistant_backend.analyzeFile(file_obj, instruction["description"], id_thread=thread_id)
+            response, thread_id_resp = assistant_backend.analyzeFile(file_obj, instruction["description"], id_thread=thread_id, thread_name=f"Analysis of {file.filename}")
         
         return jsonify({"message": "Request sent successfully!", "response": response}), 200
     except Exception as e:
