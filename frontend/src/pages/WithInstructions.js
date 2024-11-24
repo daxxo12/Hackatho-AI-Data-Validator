@@ -58,7 +58,7 @@ const formDataIns = new FormData();
 
 function handleFileUpload(event){
     formDataDoc.append('file', event.target.files[0]);
-    formDataIns.append('name', event.target.files[0].name);
+    formDataDoc.append('name', event.target.files[0].name);
     uploadedDoc = true;
     if(uploadedDoc && uploadedInstructions){
         document.getElementById('Start-Validating-Container').style.display = "flex";

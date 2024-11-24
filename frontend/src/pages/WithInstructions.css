@@ -30,7 +30,7 @@
 }
 .Upload-Label{
     position: absolute;
-    top: 70%;
+    transform: translateY(160px);
 }
 
 .UploadArea:hover{
@@ -55,7 +55,7 @@
 
 #Start-Validating-Container{
     position:absolute;
-    bottom: 75px;
+    bottom: 20px;
     display: none;
     align-items: center;
     justify-content: center;

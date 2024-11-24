@@ -6,7 +6,7 @@ const api = axios.create({
 
 export const getData = async (category) => {
     try {
-        const response = await api.get("/instructions");
+        const response = await api.get(category);
         return response.data;
     } catch(error) {
         throw Error(error.message);

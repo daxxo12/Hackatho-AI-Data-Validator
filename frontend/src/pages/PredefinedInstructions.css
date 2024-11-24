@@ -1,0 +1,53 @@
+.PredefinedInstructions{
+    width: 100%;
+    height: 100%;
+}
+
+.PredefinedI-header{
+    margin-top: 50px;
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+    justify-content: center;
+    color: white;
+}
+
+.Instructions-List-Container{
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    width: 400px;
+    height: 500px;
+    background-color: rgb(37, 35, 36);
+    border-radius: 12px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.Instructions-Title{
+    position: absolute;
+    font-weight: 500;
+    transform:translateY(-60px);
+}
+.Instruction-Choice{
+    width: 100%;
+    height: auto;
+    padding: 5px;
+    background-color: rgb(56, 51, 55);
+    border-radius: 12px;
+    user-select: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.Instruction-Choice:hover{
+    background-color: rgb(226, 0, 116);
+    color: white;
+}
+
+.Picked-Instruction{
+    background-color: rgb(79, 172, 110);
+}
