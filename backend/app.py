@@ -126,7 +126,7 @@ def send_to_assistant():
             if thread_id == "":
                 db.add_thread("user", thread_id_resp, f"Analysis of {file.filename}")
         
-        return jsonify({"message": "Request sent successfully!", "response": response}), 200
+        return jsonify({"message": "Request sent successfully!", "response": response, "thread_id" : thread_id_resp}), 200
     except Exception as e:
         return jsonify({"error": f"Failed to process the request: {str(e)}"}), 500
     finally:
