@@ -24,6 +24,10 @@ def hello_world():
 @app.route("/instructions", methods=["POST"])
 def handle_instructions():
 
+    name = request.form.get('name')  # Instruction name from the body
+    if not name or not name.strip():
+        return jsonify({"error": "Instruction name is required."}), 400
+
     if 'file' in request.files:
         file = request.files['file']
         if file and allowed_file(file.filename):
@@ -38,10 +42,9 @@ def handle_instructions():
         return jsonify({"error": "No valid input provided. Submit a file or text."}), 400
 
     try:
-        if 'name' in request.json:
-            db.add_instruction(request.json.name, instruction)
-        else:
-            return jsonify({"error": "Instruction name not provided."}), 400
+        
+        db.add_instruction(name, instruction)
+       
         return jsonify({"message": "Instruction saved successfully!", "instruction": instruction}), 200
     except Exception as e:
         return jsonify({"error": f"Failed to save instruction: {str(e)}"}), 500
@@ -83,7 +86,6 @@ def upload_file():
 
     return jsonify({"error": "Invalid file type. Only .txt and .pdf files are allowed."}), 400
 
-#67422c4e569d5b355a2c6096
 
 @app.route("/assistant", methods=["POST"])
 def send_to_assistant():
